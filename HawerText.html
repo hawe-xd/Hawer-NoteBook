@@ -1,0 +1,4610 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAWEROLANDIA Notebook v0.6</title>
+
+<style>
+:root{
+  --bg:#090c11;
+  --panel:#0d1117;
+  --panel2:#111720;
+  --line:#202938;
+
+  --text:#e8edf5;
+  --muted:#8e9aab;
+
+  --blue:#6aa4ff;
+  --purple:#917dff;
+  --teal:#58d8d0;
+
+  --danger:#ff7373;
+  --warn:#f4c66d;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  height:100%;
+  margin:0;
+}
+
+body{
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(106,164,255,.09),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 90% 100%,
+      rgba(145,125,255,.07),
+      transparent 38%
+    ),
+    var(--bg);
+
+  color:var(--text);
+
+  font:
+    14px
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  color:inherit;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+  height:100%;
+
+  display:grid;
+
+  grid-template-columns:245px 1fr;
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+  border-right:1px solid var(--line);
+
+  background:
+    rgba(13,17,23,.92);
+
+  display:flex;
+  flex-direction:column;
+
+  min-width:0;
+}
+
+.brand{
+  padding:22px 18px 17px;
+
+  border-bottom:1px solid var(--line);
+}
+
+.brand b{
+  font-size:16px;
+  letter-spacing:.2px;
+}
+
+.brand small{
+  display:block;
+
+  color:var(--muted);
+
+  margin-top:5px;
+}
+
+.nav{
+  padding:12px 10px;
+
+  overflow:auto;
+}
+
+.nav button,
+.custom-cat{
+  width:100%;
+
+  border:0;
+
+  background:transparent;
+
+  text-align:left;
+
+  padding:10px 11px;
+
+  border-radius:8px;
+
+  color:#aab4c3;
+
+  cursor:pointer;
+
+  margin-bottom:3px;
+}
+
+.nav button:hover,
+.custom-cat:hover{
+  background:#151c27;
+  color:var(--text);
+}
+
+.nav button.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(106,164,255,.15),
+      rgba(145,125,255,.08)
+    );
+
+  color:#dfe9ff;
+}
+
+.nav .icon{
+  display:inline-flex;
+
+  width:23px;
+
+  align-items:center;
+
+  color:#8290a5;
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+
+  padding:12px;
+
+  border-top:1px solid var(--line);
+}
+
+.mini-actions{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:7px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  border:1px solid var(--line);
+
+  background:#111720;
+
+  border-radius:8px;
+
+  padding:9px 10px;
+
+  cursor:pointer;
+
+  color:#cbd5e4;
+
+  transition:
+    background .16s,
+    border-color .16s,
+    transform .08s;
+}
+
+.btn:hover{
+  border-color:#35445b;
+  background:#151d28;
+}
+
+.btn:active{
+  transform:translateY(1px);
+}
+
+.btn.primary{
+  background:
+    linear-gradient(
+      135deg,
+      #243b63,
+      #312b57
+    );
+
+  border-color:#46628f;
+}
+
+.status{
+  font-size:11px;
+
+  color:var(--muted);
+
+  margin-top:9px;
+
+  min-height:15px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+  min-width:0;
+
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  height:65px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:0 22px;
+
+  border-bottom:1px solid var(--line);
+
+  background:
+    rgba(9,12,17,.72);
+}
+
+.title{
+  font-size:18px;
+
+  font-weight:650;
+
+  min-width:0;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search{
+  margin-left:auto;
+
+  width:min(330px,38vw);
+
+  position:relative;
+}
+
+.search input{
+  width:100%;
+
+  background:#0e141c;
+
+  border:1px solid var(--line);
+
+  border-radius:8px;
+
+  color:var(--text);
+
+  outline:0;
+
+  padding:9px 11px;
+}
+
+.search input:focus{
+  border-color:#405a83;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(106,164,255,.08);
+}
+
+.search-results{
+  position:absolute;
+
+  right:0;
+  top:calc(100% + 6px);
+
+  width:min(430px,70vw);
+
+  max-height:55vh;
+
+  overflow:auto;
+
+  display:none;
+
+  z-index:30;
+
+  background:#0d131b;
+
+  border:1px solid #2a3546;
+
+  border-radius:10px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(0,0,0,.38);
+}
+
+.search-results.show{
+  display:block;
+}
+
+.search-result{
+  display:block;
+
+  width:100%;
+
+  text-align:left;
+
+  border:0;
+
+  background:transparent;
+
+  padding:10px 12px;
+
+  color:#cbd5e4;
+
+  cursor:pointer;
+
+  border-bottom:
+    1px solid
+    rgba(32,41,56,.7);
+}
+
+.search-result:last-child{
+  border-bottom:0;
+}
+
+.search-result:hover{
+  background:#151c27;
+}
+
+.search-result b{
+  display:block;
+
+  font-size:12px;
+
+  color:#dfe7f4;
+}
+
+.search-result span{
+  display:block;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  margin-top:3px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.search-empty{
+  padding:12px;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+.search-hit{
+  background:
+    rgba(106,164,255,.2);
+
+  border-radius:2px;
+
+  box-shadow:
+    0 0 0 1px
+    rgba(106,164,255,.13);
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+  flex:1;
+
+  min-height:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  padding:18px 22px 15px;
+}
+
+.toolbar{
+  display:flex;
+
+  gap:7px;
+
+  align-items:center;
+
+  margin-bottom:10px;
+
+  flex-wrap:wrap;
+}
+
+.toolbar .hint{
+  color:var(--muted);
+
+  font-size:12px;
+
+  margin-left:auto;
+}
+
+.shortcut{
+  font:11px monospace;
+
+  color:#7e8da2;
+
+  background:#0a0f15;
+
+  border:1px solid var(--line);
+
+  padding:2px 5px;
+
+  border-radius:5px;
+}
+
+
+/* =========================================================
+   EDYTOR
+========================================================= */
+
+.editor-wrap{
+  position:relative;
+
+  flex:1;
+
+  min-height:0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:11px;
+
+  background:#0c1118;
+
+  box-shadow:
+    0 15px 45px
+    rgba(0,0,0,.18);
+
+  overflow:hidden;
+}
+
+#editor{
+  width:100%;
+  height:100%;
+
+  padding:20px 21px;
+
+  outline:none;
+
+  overflow:auto;
+
+  color:var(--text);
+
+  caret-color:var(--text);
+
+  background:transparent;
+
+  font:
+    15px/1.65
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  white-space:pre-wrap;
+
+  overflow-wrap:break-word;
+
+  word-break:normal;
+
+  tab-size:4;
+
+  cursor:text;
+}
+
+#editor:focus{
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(106,164,255,.14);
+}
+
+#editor::selection{
+  background:
+    rgba(106,164,255,.25);
+}
+
+
+/* =========================================================
+   LINIE W EDYTORZE
+========================================================= */
+
+.editor-line{
+  display:block;
+
+  position:relative;
+
+  min-height:24.75px;
+
+  padding-left:13px;
+
+  border-left:2px solid transparent;
+
+  border-radius:2px;
+
+  white-space:pre-wrap;
+
+  overflow-wrap:break-word;
+
+  word-break:normal;
+}
+
+
+/*
+   Zwykła linia nie dostaje żadnego
+   specjalnego tła.
+*/
+
+
+/* =========================================================
+   EFEKT: WAŻNE
+========================================================= */
+
+.editor-line.effect-important{
+  border-left-color:
+    rgba(244,198,109,.8);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(244,198,109,.075),
+      rgba(244,198,109,.018) 55%,
+      transparent
+    );
+}
+
+.editor-line.effect-important:not(.effect-start){
+  background:
+    linear-gradient(
+      90deg,
+      rgba(244,198,109,.038),
+      transparent 65%
+    );
+}
+
+
+/* =========================================================
+   EFEKT: NIEPEWNE
+========================================================= */
+
+.editor-line.effect-uncertain{
+  border-left-color:
+    rgba(215,190,118,.65);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(244,198,109,.045),
+      transparent 65%
+    );
+}
+
+
+/* =========================================================
+   EFEKT: NAGŁÓWEK
+========================================================= */
+
+.editor-line.effect-header{
+  border-left-color:
+    rgba(106,164,255,.8);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(106,164,255,.07),
+      transparent 68%
+    );
+}
+
+
+/* =========================================================
+   EFEKT: UTRACONE
+========================================================= */
+
+.editor-line.effect-lost{
+  border-left-color:
+    rgba(255,115,115,.72);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,115,115,.055),
+      transparent 68%
+    );
+}
+
+
+/* =========================================================
+   EFEKT: POSTAĆ
+========================================================= */
+
+.editor-line.effect-character{
+  border-left-color:
+    rgba(88,216,208,.72);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(88,216,208,.055),
+      transparent 68%
+    );
+}
+
+
+/* =========================================================
+   EFEKT: MUZYKA
+========================================================= */
+
+.editor-line.effect-music{
+  border-left-color:
+    rgba(145,125,255,.78);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(145,125,255,.065),
+      transparent 68%
+    );
+}
+
+
+/* =========================================================
+   TEKSTY
+========================================================= */
+
+.editor-line.effect-header{
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+  font-size:16px;
+
+  font-weight:650;
+}
+
+.editor-line.effect-uncertain{
+  color:#d5c58f;
+}
+
+.editor-line.effect-lost{
+  color:#a8afb9;
+
+  text-decoration:
+    line-through;
+
+  text-decoration-thickness:1px;
+}
+
+.editor-line.effect-character{
+  color:#aee8e3;
+}
+
+.editor-line.effect-music{
+  color:#d1c9ff;
+}
+
+
+/* =========================================================
+   MARKER WIZUALNY
+=========================================================
+
+   WAŻNE:
+   Tekst "#!" naprawdę pozostaje wewnątrz span.
+   Ma jednak font-size:0, więc nie przesuwa tekstu.
+   Pseudo-element pokazuje tylko ikonę.
+*/
+
+.marker-token{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  flex:none;
+
+  width:24px;
+  height:24px;
+
+  margin-right:8px;
+
+  vertical-align:middle;
+
+  border:
+    1px solid
+    currentColor;
+
+  border-radius:7px;
+
+  font-size:0;
+
+  line-height:0;
+
+  user-select:text;
+
+  position:relative;
+
+  transform:
+    translateY(-1px);
+
+  background:
+    rgba(255,255,255,.018);
+}
+
+.marker-token::before{
+  content:"";
+
+  font:
+    700 13px/1
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+
+/* =========================================================
+   IKONY
+========================================================= */
+
+.marker-important{
+  color:var(--warn);
+}
+
+.marker-important::before{
+  content:"!";
+}
+
+.marker-uncertain{
+  color:#d7be76;
+}
+
+.marker-uncertain::before{
+  content:"?";
+}
+
+.marker-header{
+  color:var(--blue);
+}
+
+.marker-header::before{
+  content:"›";
+}
+
+.marker-lost{
+  color:var(--danger);
+}
+
+.marker-lost::before{
+  content:"×";
+}
+
+.marker-character{
+  color:var(--teal);
+}
+
+.marker-character::before{
+  content:"●";
+  font-size:9px;
+}
+
+.marker-music{
+  color:var(--purple);
+}
+
+.marker-music::before{
+  content:"♪";
+}
+
+
+/* =========================================================
+   #$
+========================================================= */
+
+.editor-line.divider-line{
+  padding-left:0;
+
+  border-left:0;
+
+  height:25px;
+
+  min-height:25px;
+
+  display:flex;
+
+  align-items:center;
+
+  overflow:hidden;
+}
+
+.divider-token{
+  width:100%;
+
+  height:1px;
+
+  margin:0;
+
+  padding:0;
+
+  border:0;
+
+  border-radius:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #354153 15%,
+      #354153 85%,
+      transparent
+    );
+
+  font-size:0;
+
+  color:transparent;
+
+  position:relative;
+
+  display:block;
+}
+
+.divider-token::before{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+
+  top:50%;
+
+  width:5px;
+
+  height:5px;
+
+  transform:
+    translate(-50%,-50%);
+
+  border-radius:50%;
+
+  background:#5d6b80;
+
+  box-shadow:
+    0 0 0 3px
+    #0c1118;
+}
+
+
+/* =========================================================
+   #)
+========================================================= */
+
+.end-effect-line{
+  height:0;
+
+  min-height:0;
+
+  padding:0;
+
+  border:0;
+
+  margin:0;
+
+  overflow:visible;
+}
+
+/*
+   #) sam w sobie jest praktycznie niewidoczny.
+   Nie robi pustego odstępu.
+*/
+
+.end-effect-token{
+  display:inline;
+
+  width:0;
+
+  height:0;
+
+  margin:0;
+  padding:0;
+
+  font-size:0;
+
+  line-height:0;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  padding-top:8px;
+}
+
+.footer-left,
+.footer-right{
+  display:flex;
+
+  gap:12px;
+
+  align-items:center;
+
+  min-width:0;
+}
+
+.effect-status{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:5px;
+
+  padding:3px 7px;
+
+  border-radius:6px;
+
+  background:#10161f;
+
+  border:
+    1px solid
+    var(--line);
+
+  white-space:nowrap;
+}
+
+.effect-status .dot{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:#667489;
+}
+
+.effect-status.important .dot{
+  background:var(--warn);
+}
+
+.effect-status.uncertain .dot{
+  background:#d7be76;
+}
+
+.effect-status.header .dot{
+  background:var(--blue);
+}
+
+.effect-status.lost .dot{
+  background:var(--danger);
+}
+
+.effect-status.character .dot{
+  background:var(--teal);
+}
+
+.effect-status.music .dot{
+  background:var(--purple);
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  background:
+    rgba(3,5,8,.7);
+
+  backdrop-filter:
+    blur(5px);
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  z-index:100;
+}
+
+.overlay.show{
+  display:flex;
+}
+
+.modal{
+  width:min(780px,100%);
+
+  max-height:85vh;
+
+  overflow:auto;
+
+  background:#0e141c;
+
+  border:
+    1px solid
+    #2a3546;
+
+  border-radius:12px;
+
+  box-shadow:
+    0 25px 80px
+    #000;
+}
+
+.modal-head{
+  padding:15px 17px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+}
+
+.modal-body{
+  padding:17px;
+}
+
+.marker-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.marker{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:8px;
+
+  background:#10161f;
+}
+
+.marker-badge{
+  flex:none;
+
+  width:28px;
+  height:28px;
+
+  border-radius:7px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:
+    1px solid
+    currentColor;
+
+  font-weight:700;
+}
+
+.marker-info{
+  min-width:0;
+}
+
+.marker-info b{
+  display:block;
+
+  color:#dfe6f1;
+
+  font-size:13px;
+}
+
+.marker-info span{
+  color:var(--muted);
+
+  display:block;
+
+  margin-top:3px;
+
+  font-size:12px;
+}
+
+.marker button{
+  margin-left:auto;
+
+  padding:7px 9px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  .app{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .content{
+    padding:12px;
+  }
+
+  .topbar{
+    padding:0 12px;
+  }
+
+  .search{
+    width:46vw;
+  }
+
+  .toolbar .hint{
+    display:none;
+  }
+
+  .marker-list{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <b>HAWEROLANDIA</b>
+      <small>Notebook · v0.6</small>
+    </div>
+
+    <nav
+      class="nav"
+      id="nav"
+    ></nav>
+
+    <div class="sidebar-bottom">
+
+      <div class="mini-actions">
+
+        <button
+          class="btn"
+          id="importBtn"
+        >
+          Import JSON
+        </button>
+
+        <button
+          class="btn primary"
+          id="exportBtn"
+        >
+          Eksport JSON
+        </button>
+
+      </div>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept=".json,application/json"
+        hidden
+      >
+
+      <div
+        class="status"
+        id="status"
+      >
+        Gotowe
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div
+        class="title"
+        id="title"
+      >
+        Fabuła
+      </div>
+
+      <div class="search">
+
+        <input
+          id="search"
+          autocomplete="off"
+          placeholder="Szukaj w notatkach…"
+        >
+
+        <div
+          class="search-results"
+          id="searchResults"
+        ></div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <div class="toolbar">
+
+        <button
+          class="btn"
+          id="markersBtn"
+        >
+          Znaczniki
+        </button>
+
+        <button
+          class="btn"
+          id="saveBtn"
+        >
+          Zapisz teraz
+        </button>
+
+        <span class="hint">
+          <span class="shortcut">Ctrl+S</span>
+          · automatyczny zapis
+          · zakończenie efektu: <b>#)</b>
+        </span>
+
+      </div>
+
+
+      <!-- =================================================
+           PRAWDZIWY EDYTOR
+      ================================================= -->
+
+      <div class="editor-wrap">
+
+        <div
+          id="editor"
+          contenteditable="true"
+          spellcheck="false"
+          role="textbox"
+          aria-multiline="true"
+          aria-label="Edytor notatki"
+        ></div>
+
+      </div>
+
+
+      <div class="footer">
+
+        <div class="footer-left">
+
+          <span id="stats">
+            0 znaków · 0 linii
+          </span>
+
+          <span
+            class="effect-status"
+            id="effectStatus"
+          >
+
+            <span class="dot"></span>
+
+            <span id="effectStatusText">
+              Zwykły tekst
+            </span>
+
+          </span>
+
+        </div>
+
+
+        <div class="footer-right">
+
+          <span id="saveInfo">
+            —
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- =======================================================
+     MARKER MODAL
+======================================================= -->
+
+<div
+  class="overlay"
+  id="modal"
+>
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <b>
+        Znaczniki specjalne
+      </b>
+
+      <button
+        class="btn"
+        id="closeModal"
+      >
+        Zamknij
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        style="
+          color:#9aa6b7;
+          font-size:13px;
+          line-height:1.55;
+        "
+      >
+
+        Markery są przechowywane normalnie w tekście.
+
+        <br><br>
+
+        <b>#!</b>,
+        <b>#?</b>,
+        <b>#&gt;</b>,
+        <b>#X</b>,
+        <b>#@</b>
+        i
+        <b>#M</b>
+        rozpoczynają efekt.
+
+        <br>
+
+        Efekt trwa przez kolejne linie aż do
+        <b>#)</b>.
+
+        <br>
+
+        <b>#$</b> tworzy separator całej linii.
+
+      </div>
+
+
+      <div
+        class="marker-list"
+        id="markerList"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+"use strict";
+
+
+/* ==========================================================
+   KATEGORIE
+========================================================== */
+
+const CATEGORIES = [
+
+  ["story","Fabuła","◈"],
+
+  ["world","Świat","◇"],
+
+  ["characters","Postacie","●"],
+
+  ["music","Muzyka","♫"],
+
+  ["games","Gry i wersje","▣"],
+
+  ["mechanics","Mechaniki","⚙"],
+
+  ["ideas","Pomysły","✦"],
+
+  ["archive","Archiwum","⌁"]
+
+];
+
+
+/* ==========================================================
+   MARKERY
+========================================================== */
+
+const MARKER_META = {
+
+  "#$":{
+    name:"Separator",
+    description:
+      "Estetyczna kreska na całą linię.",
+    type:"divider"
+  },
+
+  "#>":{
+    name:"Nagłówek",
+    description:
+      "Nagłówek z niebieskim akcentem.",
+    type:"header",
+    icon:"›"
+  },
+
+  "#?":{
+    name:"Niepewne",
+    description:
+      "Informacja, której pewność jest nieznana.",
+    type:"uncertain",
+    icon:"?"
+  },
+
+  "#!":{
+    name:"Ważne",
+    description:
+      "Ważna informacja.",
+    type:"important",
+    icon:"!"
+  },
+
+  "#X":{
+    name:"Utracone / usunięte",
+    description:
+      "Treść zachowana, ale oznaczona jako utracona.",
+    type:"lost",
+    icon:"×"
+  },
+
+  "#@":{
+    name:"Postać",
+    description:
+      "Informacja dotycząca postaci.",
+    type:"character",
+    icon:"●"
+  },
+
+  "#M":{
+    name:"Muzyka",
+    description:
+      "Informacja dotycząca muzyki.",
+    type:"music",
+    icon:"♪"
+  },
+
+  "#)":{
+    name:"Koniec efektu",
+    description:
+      "Natychmiast kończy aktualny efekt.",
+    type:"end"
+  }
+
+};
+
+const EFFECT_MARKERS = [
+  "#>",
+  "#?",
+  "#!",
+  "#X",
+  "#@",
+  "#M"
+];
+
+
+/* ==========================================================
+   BAZA DANYCH
+========================================================== */
+
+const DB_NAME =
+  "hawerolandia_notebook";
+
+const DB_VERSION =
+  1;
+
+const STORE =
+  "app";
+
+const KEY =
+  "state";
+
+
+/* ==========================================================
+   STAN
+========================================================== */
+
+let state = {
+
+  version:4,
+
+  active:"story",
+
+  notes:
+    Object.fromEntries(
+      CATEGORIES.map(
+        x => [x[0],""]
+      )
+    ),
+
+  custom:[]
+
+};
+
+let dbPromise =
+  null;
+
+let saveTimer =
+  null;
+
+
+/* ==========================================================
+   HISTORIA
+========================================================== */
+
+const HISTORY_LIMIT =
+  100;
+
+let history = [];
+
+let historyIndex =
+  -1;
+
+let lastHistoryText =
+  null;
+
+
+/* ==========================================================
+   DOM
+========================================================== */
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+const editor =
+  $("editor");
+
+
+/* ==========================================================
+   STATUS
+========================================================== */
+
+function setStatus(
+  text,
+  good=true
+){
+
+  $("status").textContent =
+    text;
+
+  $("status").style.color =
+    good
+      ? "var(--muted)"
+      : "var(--danger)";
+
+}
+
+
+function setSaveInfo(
+  text
+){
+
+  $("saveInfo").textContent =
+    text;
+
+}
+
+
+/* ==========================================================
+   ESCAPE
+========================================================== */
+
+function escapeHtml(
+  value
+){
+
+  return String(value).replace(
+    /[&<>"']/g,
+    c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
+
+}
+
+
+function escapeRegExp(
+  value
+){
+
+  return String(value).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+
+}
+
+
+/* ==========================================================
+   KATEGORIE
+========================================================== */
+
+function categoryName(
+  id
+){
+
+  const found =
+    CATEGORIES.find(
+      x => x[0] === id
+    );
+
+  if(found){
+    return found[1];
+  }
+
+  return (
+    state.custom || []
+  ).find(
+    x => x.id === id
+  )?.name || "Notatka";
+
+}
+
+
+function allCategories(){
+
+  return [
+
+    ...CATEGORIES.map(
+      x => ({
+        id:x[0],
+        name:x[1],
+        icon:x[2]
+      })
+    ),
+
+    ...(state.custom || []).map(
+      x => ({
+        id:x.id,
+        name:x.name,
+        icon:"+"
+      })
+    )
+
+  ];
+
+}
+
+
+/* ==========================================================
+   NAVIGACJA
+========================================================== */
+
+function renderNav(){
+
+  $("nav").innerHTML =
+    "";
+
+  for(
+    const [id,name,icon]
+    of CATEGORIES
+  ){
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.className =
+      id === state.active
+        ? "active"
+        : "";
+
+    button.innerHTML = `
+      <span class="icon">
+        ${escapeHtml(icon)}
+      </span>
+      ${escapeHtml(name)}
+    `;
+
+    button.onclick =
+      () =>
+        switchCategory(id);
+
+    $("nav").appendChild(
+      button
+    );
+
+  }
+
+
+  for(
+    const item
+    of state.custom || []
+  ){
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.className =
+      item.id === state.active
+        ? "active custom-cat"
+        : "custom-cat";
+
+    button.innerHTML = `
+      <span class="icon">+</span>
+      ${escapeHtml(item.name)}
+    `;
+
+    button.onclick =
+      () =>
+        switchCategory(
+          item.id
+        );
+
+    $("nav").appendChild(
+      button
+    );
+
+  }
+
+}
+
+
+/* ==========================================================
+   ZMIANA KATEGORII
+========================================================== */
+
+function switchCategory(
+  id
+){
+
+  state.notes[state.active] =
+    extractEditorText();
+
+  clearTimeout(
+    saveTimer
+  );
+
+  state.active =
+    id;
+
+  editor.innerHTML =
+    "";
+
+  resetHistory(
+    state.notes[id] || ""
+  );
+
+  renderEditor(
+    state.notes[id] || ""
+  );
+
+  $("title").textContent =
+    categoryName(id);
+
+  $("search").value =
+    "";
+
+  $("searchResults")
+    .classList
+    .remove("show");
+
+  updateStats();
+
+  updateEffectStatus();
+
+  queueSave();
+
+  setStatus(
+    "Zmieniono notatkę"
+  );
+
+}
+
+
+/* ==========================================================
+   BAZA: INDEXED DB
+========================================================== */
+
+function openDB(){
+
+  if(dbPromise){
+    return dbPromise;
+  }
+
+  dbPromise =
+    new Promise(
+      (resolve,reject)=>{
+
+        if(!window.indexedDB){
+
+          reject(
+            new Error(
+              "IndexedDB niedostępne"
+            )
+          );
+
+          return;
+        }
+
+        const request =
+          indexedDB.open(
+            DB_NAME,
+            DB_VERSION
+          );
+
+        request.onupgradeneeded =
+          () => {
+
+            const db =
+              request.result;
+
+            if(
+              !db.objectStoreNames
+                .contains(STORE)
+            ){
+
+              db.createObjectStore(
+                STORE
+              );
+
+            }
+
+          };
+
+        request.onsuccess =
+          () =>
+            resolve(
+              request.result
+            );
+
+        request.onerror =
+          () =>
+            reject(
+              request.error ||
+              new Error(
+                "Nie udało się otworzyć bazy"
+              )
+            );
+
+      }
+    );
+
+  return dbPromise;
+
+}
+
+
+/* ==========================================================
+   ZAPIS
+========================================================== */
+
+async function saveState(){
+
+  clearTimeout(
+    saveTimer
+  );
+
+  state.notes[state.active] =
+    extractEditorText();
+
+  const clean =
+    JSON.parse(
+      JSON.stringify(state)
+    );
+
+  try{
+
+    const db =
+      await openDB();
+
+    await new Promise(
+      (resolve,reject)=>{
+
+        const tx =
+          db.transaction(
+            STORE,
+            "readwrite"
+          );
+
+        tx.objectStore(
+          STORE
+        ).put(
+          clean,
+          KEY
+        );
+
+        tx.oncomplete =
+          resolve;
+
+        tx.onerror =
+          () =>
+            reject(
+              tx.error
+            );
+
+        tx.onabort =
+          () =>
+            reject(
+              tx.error ||
+              new Error(
+                "Transakcja przerwana"
+              )
+            );
+
+      }
+    );
+
+    setStatus(
+      "Zapisano automatycznie"
+    );
+
+    setSaveInfo(
+      "Zapisano przed chwilą"
+    );
+
+    return true;
+
+  }catch(error){
+
+    try{
+
+      localStorage.setItem(
+        "hawerolandia_notebook_v4",
+        JSON.stringify(
+          clean
+        )
+      );
+
+      setStatus(
+        "Zapisano lokalnie"
+      );
+
+      setSaveInfo(
+        "Fallback: localStorage"
+      );
+
+      return true;
+
+    }catch(fallbackError){
+
+      setStatus(
+        "Błąd zapisu — użyj eksportu JSON",
+        false
+      );
+
+      setSaveInfo(
+        "Automatyczny zapis niedostępny"
+      );
+
+      return false;
+
+    }
+
+  }
+
+}
+
+
+function queueSave(){
+
+  clearTimeout(
+    saveTimer
+  );
+
+  saveTimer =
+    setTimeout(
+      saveState,
+      250
+    );
+
+}
+
+
+/* ==========================================================
+   LOAD
+========================================================== */
+
+async function loadState(){
+
+  try{
+
+    const db =
+      await openDB();
+
+    const loaded =
+      await new Promise(
+        (resolve,reject)=>{
+
+          const tx =
+            db.transaction(
+              STORE,
+              "readonly"
+            );
+
+          const request =
+            tx.objectStore(
+              STORE
+            ).get(
+              KEY
+            );
+
+          request.onsuccess =
+            () =>
+              resolve(
+                request.result
+              );
+
+          request.onerror =
+            () =>
+              reject(
+                request.error
+              );
+
+        }
+      );
+
+    if(loaded){
+
+      return normalize(
+        loaded
+      );
+
+    }
+
+  }catch(error){}
+
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        "hawerolandia_notebook_v4"
+      ) ||
+
+      localStorage.getItem(
+        "hawerolandia_notebook_v3"
+      ) ||
+
+      localStorage.getItem(
+        "hawerolandia_notebook_v2"
+      ) ||
+
+      localStorage.getItem(
+        "hawerolandia_notebook"
+      );
+
+    if(raw){
+
+      return normalize(
+        JSON.parse(raw)
+      );
+
+    }
+
+  }catch(error){}
+
+
+  return state;
+
+}
+
+
+/* ==========================================================
+   NORMALIZACJA
+========================================================== */
+
+function normalize(
+  data
+){
+
+  if(
+    !data ||
+    typeof data !== "object"
+  ){
+
+    return state;
+
+  }
+
+  const output = {
+
+    version:4,
+
+    active:
+      data.active ||
+      "story",
+
+    notes:{
+      ...state.notes
+    },
+
+    custom:
+      Array.isArray(
+        data.custom
+      )
+        ? data.custom
+        : []
+
+  };
+
+
+  if(
+    data.notes &&
+    typeof data.notes === "object"
+  ){
+
+    Object.assign(
+      output.notes,
+      data.notes
+    );
+
+  }
+
+
+  const ids =
+    new Set(
+      [
+        ...CATEGORIES.map(
+          c => c[0]
+        ),
+
+        ...output.custom.map(
+          c => c.id
+        )
+      ]
+    );
+
+
+  if(
+    !ids.has(
+      output.active
+    )
+  ){
+
+    output.active =
+      "story";
+
+  }
+
+
+  return output;
+
+}
+
+
+/* ==========================================================
+   SERIALIZACJA EDYTORA
+==========================================================
+
+   Każda linia jest osobnym divem.
+   Dzięki temu nie polegamy na innerText,
+   tylko dokładnie odbudowujemy "\n".
+========================================================== */
+
+function extractEditorText(){
+
+  const lines =
+    Array.from(
+      editor.children
+    );
+
+
+  if(
+    lines.length === 0
+  ){
+
+    return "";
+
+  }
+
+
+  return lines
+    .map(
+      line =>
+        line.textContent
+    )
+    .join("\n");
+
+}
+
+
+/* ==========================================================
+   HISTORIA
+========================================================== */
+
+function resetHistory(
+  text
+){
+
+  history =
+    [text];
+
+  historyIndex =
+    0;
+
+  lastHistoryText =
+    text;
+
+}
+
+
+function pushHistory(
+  text
+){
+
+  if(
+    text ===
+    lastHistoryText
+  ){
+
+    return;
+
+  }
+
+
+  history =
+    history.slice(
+      0,
+      historyIndex + 1
+    );
+
+
+  history.push(
+    text
+  );
+
+
+  if(
+    history.length >
+    HISTORY_LIMIT
+  ){
+
+    history.shift();
+
+  }else{
+
+    historyIndex++;
+
+  }
+
+
+  lastHistoryText =
+    text;
+
+}
+
+
+function applyHistory(
+  index
+){
+
+  if(
+    index < 0 ||
+    index >= history.length
+  ){
+
+    return;
+
+  }
+
+
+  historyIndex =
+    index;
+
+  const text =
+    history[
+      historyIndex
+    ];
+
+
+  state.notes[state.active] =
+    text;
+
+
+  const snapshot =
+    {
+      start:text.length,
+      end:text.length
+    };
+
+
+  renderEditor(
+    text,
+    snapshot
+  );
+
+  updateStats();
+
+  updateEffectStatus();
+
+  queueSave();
+
+}
+
+
+/* ==========================================================
+   POZYCJA KURSORA
+========================================================== */
+
+function getLineElement(
+  node
+){
+
+  if(
+    !node
+  ){
+
+    return null;
+
+  }
+
+
+  if(
+    node.nodeType ===
+    Node.ELEMENT_NODE
+  ){
+
+    if(
+      node.classList.contains(
+        "editor-line"
+      )
+    ){
+
+      return node;
+
+    }
+
+
+    return node.closest(
+      ".editor-line"
+    );
+
+  }
+
+
+  return node.parentElement
+    ?.closest(
+      ".editor-line"
+    ) || null;
+
+}
+
+
+/* ==========================================================
+   OFFSET W LINII
+========================================================== */
+
+function offsetInsideLine(
+  line,
+  node,
+  offset
+){
+
+  const range =
+    document.createRange();
+
+  range.selectNodeContents(
+    line
+  );
+
+  try{
+
+    range.setEnd(
+      node,
+      offset
+    );
+
+  }catch(error){
+
+    return 0;
+
+  }
+
+
+  return range
+    .toString()
+    .length;
+
+}
+
+
+/* ==========================================================
+   ABSOLUTNY OFFSET
+========================================================== */
+
+function absoluteOffset(
+  node,
+  offset
+){
+
+  const line =
+    getLineElement(
+      node
+    );
+
+
+  if(!line){
+
+    return 0;
+
+  }
+
+
+  const allLines =
+    Array.from(
+      editor.children
+    );
+
+  const index =
+    allLines.indexOf(
+      line
+    );
+
+
+  if(index < 0){
+
+    return 0;
+
+  }
+
+
+  let result =
+    0;
+
+
+  for(
+    let i=0;
+    i<index;
+    i++
+  ){
+
+    result +=
+      allLines[i]
+        .textContent
+        .length;
+
+    result += 1;
+
+  }
+
+
+  result +=
+    offsetInsideLine(
+      line,
+      node,
+      offset
+    );
+
+
+  return result;
+
+}
+
+
+/* ==========================================================
+   ZAPIS SELEKCJI
+========================================================== */
+
+function saveSelection(){
+
+  const selection =
+    window.getSelection();
+
+
+  if(
+    !selection ||
+    selection.rangeCount === 0
+  ){
+
+    return {
+      start:0,
+      end:0
+    };
+
+  }
+
+
+  return {
+
+    start:
+      absoluteOffset(
+        selection.anchorNode,
+        selection.anchorOffset
+      ),
+
+    end:
+      absoluteOffset(
+        selection.focusNode,
+        selection.focusOffset
+      )
+
+  };
+
+}
+
+
+/* ==========================================================
+   ZNALEZIENIE OFFSETU W LINII
+========================================================== */
+
+function nodeAtLineOffset(
+  line,
+  offset
+){
+
+  const walker =
+    document.createTreeWalker(
+      line,
+      NodeFilter.SHOW_TEXT
+    );
+
+  let current;
+
+  let consumed =
+    0;
+
+
+  while(
+    current =
+      walker.nextNode()
+  ){
+
+    const length =
+      current.textContent.length;
+
+
+    if(
+      offset <=
+      consumed + length
+    ){
+
+      return {
+
+        node:
+          current,
+
+        offset:
+          offset - consumed
+
+      };
+
+    }
+
+
+    consumed +=
+      length;
+
+  }
+
+
+  return {
+
+    node:line,
+
+    offset:
+      line.childNodes.length
+
+  };
+
+}
+
+
+/* ==========================================================
+   PRZYWRÓCENIE SELEKCJI
+========================================================== */
+
+function restoreSelection(
+  snapshot
+){
+
+  const lines =
+    Array.from(
+      editor.children
+    );
+
+
+  if(
+    !lines.length
+  ){
+
+    return;
+
+  }
+
+
+  const resolve =
+    absolute => {
+
+      let remaining =
+        absolute;
+
+
+      for(
+        let i=0;
+        i<lines.length;
+        i++
+      ){
+
+        const length =
+          lines[i]
+            .textContent
+            .length;
+
+
+        if(
+          remaining <=
+          length
+        ){
+
+          return nodeAtLineOffset(
+            lines[i],
+            remaining
+          );
+
+        }
+
+
+        remaining -=
+          length;
+
+
+        /*
+          Przejście między liniami
+          odpowiada jednemu "\n".
+        */
+
+        if(
+          i <
+          lines.length - 1
+        ){
+
+          if(
+            remaining === 0
+          ){
+
+            return {
+              node:lines[i + 1],
+              offset:0
+            };
+
+          }
+
+          remaining--;
+
+        }
+
+      }
+
+
+      return nodeAtLineOffset(
+        lines[
+          lines.length - 1
+        ],
+        lines[
+          lines.length - 1
+        ].textContent.length
+      );
+
+    };
+
+
+  const start =
+    resolve(
+      Math.max(
+        0,
+        snapshot.start
+      )
+    );
+
+
+  const end =
+    resolve(
+      Math.max(
+        0,
+        snapshot.end
+      )
+    );
+
+
+  const selection =
+    window.getSelection();
+
+
+  const range =
+    document.createRange();
+
+
+  try{
+
+    range.setStart(
+      start.node,
+      start.offset
+    );
+
+    range.setEnd(
+      end.node,
+      end.offset
+    );
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+      range
+    );
+
+  }catch(error){
+
+    /*
+      Awaryjnie ustawiamy kursor
+      na końcu edytora.
+    */
+
+    range.selectNodeContents(
+      editor
+    );
+
+    range.collapse(
+      false
+    );
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+      range
+    );
+
+  }
+
+}
+
+
+/* ==========================================================
+   PARSER
+========================================================== */
+
+function markerAtLine(
+  line
+){
+
+  const match =
+    line.match(
+      /^(#[$>?!X@M)])(?:\s|$)/
+    );
+
+
+  if(!match){
+
+    return null;
+
+  }
+
+
+  return {
+
+    marker:
+      match[1],
+
+    bodyStart:
+      match[0].length
+
+  };
+
+}
+
+
+/* ==========================================================
+   TWORZENIE TEKSTU
+========================================================== */
+
+function textNode(
+  text
+){
+
+  return document.createTextNode(
+    text
+  );
+
+}
+
+
+/* ==========================================================
+   MARKER STARTOWY
+========================================================== */
+
+function createStartMarker(
+  marker,
+  source
+){
+
+  const meta =
+    MARKER_META[marker];
+
+
+  const token =
+    document.createElement(
+      "span"
+    );
+
+
+  token.className =
+    `marker-token marker-${meta.type}`;
+
+
+  /*
+    Ważne:
+    do tokena wkładamy PRAWDZIWY marker.
+    CSS tylko sprawia, że wizualnie go nie widać.
+  */
+
+  token.textContent =
+    source;
+
+
+  token.setAttribute(
+    "data-marker",
+    marker
+  );
+
+
+  return token;
+
+}
+
+
+/* ==========================================================
+   DIVIDER
+========================================================== */
+
+function createDividerToken(
+  source
+){
+
+  const token =
+    document.createElement(
+      "span"
+    );
+
+
+  token.className =
+    "divider-token";
+
+
+  token.textContent =
+    source;
+
+
+  token.setAttribute(
+    "data-marker",
+    "#$"
+  );
+
+
+  return token;
+
+}
+
+
+/* ==========================================================
+   END EFFECT
+========================================================== */
+
+function createEndToken(
+  source
+){
+
+  const token =
+    document.createElement(
+      "span"
+    );
+
+
+  token.className =
+    "end-effect-token";
+
+
+  token.textContent =
+    source;
+
+
+  token.setAttribute(
+    "data-marker",
+    "#)"
+  );
+
+
+  return token;
+
+}
+
+
+/* ==========================================================
+   RENDER LINII
+========================================================== */
+
+function renderSingleLine(
+  rawLine,
+  activeEffect
+){
+
+  const line =
+    document.createElement(
+      "div"
+    );
+
+
+  line.className =
+    "editor-line";
+
+
+  /*
+    Dzięki temu można później jednoznacznie
+    rozpoznać linię.
+  */
+
+
+  const detected =
+    markerAtLine(
+      rawLine
+    );
+
+
+  /* ======================================================
+     #$
+  ====================================================== */
+
+  if(
+    detected &&
+    detected.marker === "#$"
+  ){
+
+    line.classList.add(
+      "divider-line"
+    );
+
+
+    const source =
+      rawLine.slice(
+        0,
+        detected.bodyStart
+      );
+
+
+    const token =
+      createDividerToken(
+        source
+      );
+
+
+    line.appendChild(
+      token
+    );
+
+
+    /*
+      Jeżeli ktoś napisał coś po #$,
+      nie tracimy tego tekstu.
+    */
+
+    const rest =
+      rawLine.slice(
+        detected.bodyStart
+      );
+
+
+    if(rest){
+
+      line.appendChild(
+        textNode(rest)
+      );
+
+    }
+
+
+    return line;
+
+  }
+
+
+  /* ======================================================
+     #)
+  ====================================================== */
+
+  if(
+    detected &&
+    detected.marker === "#)"
+  ){
+
+    line.classList.add(
+      "end-effect-line"
+    );
+
+
+    const source =
+      rawLine.slice(
+        0,
+        detected.bodyStart
+      );
+
+
+    line.appendChild(
+      createEndToken(
+        source
+      )
+    );
+
+
+    /*
+      Efekt jest już wcześniej wyłączony
+      przez parser.
+    */
+
+    return line;
+
+  }
+
+
+  /* ======================================================
+     NOWY EFEKT
+  ====================================================== */
+
+  let effect =
+    activeEffect;
+
+
+  if(
+    detected &&
+    EFFECT_MARKERS.includes(
+      detected.marker
+    )
+  ){
+
+    effect =
+      detected.marker;
+
+    line.classList.add(
+      "effect-start"
+    );
+
+    line.classList.add(
+      `effect-${MARKER_META[
+        detected.marker
+      ].type}`
+    );
+
+
+    const source =
+      rawLine.slice(
+        0,
+        detected.bodyStart
+      );
+
+
+    const markerText =
+      source.slice(
+        0,
+        detected.marker.length
+      );
+
+
+    /*
+      Zachowujemy też spację,
+      która znajdowała się po markerze.
+    */
+
+    const markerSource =
+      source;
+
+
+    line.appendChild(
+      createStartMarker(
+        detected.marker,
+        markerSource
+      )
+    );
+
+
+    const body =
+      rawLine.slice(
+        detected.bodyStart
+      );
+
+
+    if(body){
+
+      line.appendChild(
+        textNode(body)
+      );
+
+    }
+
+
+    return {
+      line,
+      nextEffect:effect
+    };
+
+  }
+
+
+  /* ======================================================
+     KONTYNUACJA AKTYWNEGO EFEKTU
+  ====================================================== */
+
+  if(effect){
+
+    line.classList.add(
+      `effect-${MARKER_META[
+        effect
+      ].type}`
+    );
+
+  }
+
+
+  line.appendChild(
+    textNode(
+      rawLine
+    )
+  );
+
+
+  return {
+    line,
+    nextEffect:effect
+  };
+
+}
+
+
+/* ==========================================================
+   PEŁNY RENDER
+========================================================== */
+
+function renderEditor(
+  text,
+  selectionSnapshot=null
+){
+
+  const source =
+    String(text ?? "");
+
+
+  const lines =
+    source.split(
+      "\n"
+    );
+
+
+  const fragment =
+    document.createDocumentFragment();
+
+
+  let activeEffect =
+    null;
+
+
+  for(
+    let i=0;
+    i<lines.length;
+    i++
+  ){
+
+    const rawLine =
+      lines[i];
+
+
+    const detected =
+      markerAtLine(
+        rawLine
+      );
+
+
+    /*
+      #$ nie zmienia aktywnego efektu.
+    */
+
+    if(
+      detected &&
+      detected.marker === "#$"
+    ){
+
+      const line =
+        renderSingleLine(
+          rawLine,
+          activeEffect
+        );
+
+
+      fragment.appendChild(
+        line
+      );
+
+      continue;
+
+    }
+
+
+    /*
+      #) kończy efekt przed następną linią.
+    */
+
+    if(
+      detected &&
+      detected.marker === "#)"
+    ){
+
+      const line =
+        renderSingleLine(
+          rawLine,
+          activeEffect
+        );
+
+
+      fragment.appendChild(
+        line
+      );
+
+
+      activeEffect =
+        null;
+
+
+      continue;
+
+    }
+
+
+    /*
+      Zwykły marker rozpoczyna nowy efekt.
+    */
+
+    if(
+      detected &&
+      EFFECT_MARKERS.includes(
+        detected.marker
+      )
+    ){
+
+      const result =
+        renderSingleLine(
+          rawLine,
+          activeEffect
+        );
+
+
+      fragment.appendChild(
+        result.line
+      );
+
+
+      activeEffect =
+        result.nextEffect;
+
+
+      continue;
+
+    }
+
+
+    /*
+      Zwykła linia.
+    */
+
+    const result =
+      renderSingleLine(
+        rawLine,
+        activeEffect
+      );
+
+
+    fragment.appendChild(
+      result.line
+    );
+
+  }
+
+
+  editor.innerHTML =
+    "";
+
+
+  editor.appendChild(
+    fragment
+  );
+
+
+  /*
+    Po przebudowaniu DOM-u
+    przywracamy dokładnie poprzednią
+    pozycję kursora.
+  */
+
+  if(selectionSnapshot){
+
+    restoreSelection(
+      selectionSnapshot
+    );
+
+  }
+
+}
+
+
+/* ==========================================================
+   INPUT
+========================================================== */
+
+editor.addEventListener(
+  "input",
+  () => {
+
+    const selection =
+      saveSelection();
+
+
+    const text =
+      extractEditorText();
+
+
+    state.notes[state.active] =
+      text;
+
+
+    pushHistory(
+      text
+    );
+
+
+    renderEditor(
+      text,
+      selection
+    );
+
+
+    updateStats();
+
+    updateEffectStatus();
+
+    queueSave();
+
+  }
+);
+
+
+/* ==========================================================
+   ENTER
+==========================================================
+
+   Nie pozwalamy przeglądarce tworzyć własnych
+   <div>/<br>. Wstawiamy prawdziwe "\n".
+========================================================== */
+
+editor.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "Enter" &&
+      !event.shiftKey
+    ){
+
+      event.preventDefault();
+
+      insertPlainText(
+        "\n"
+      );
+
+      return;
+
+    }
+
+
+    /* ======================================================
+       TAB
+    ====================================================== */
+
+    if(
+      event.key === "Tab"
+    ){
+
+      event.preventDefault();
+
+      insertPlainText(
+        "    "
+      );
+
+      return;
+
+    }
+
+
+    /* ======================================================
+       CTRL + Z
+    ====================================================== */
+
+    if(
+      event.ctrlKey &&
+      !event.shiftKey &&
+      event.key.toLowerCase() === "z"
+    ){
+
+      event.preventDefault();
+
+      if(
+        historyIndex > 0
+      ){
+
+        applyHistory(
+          historyIndex - 1
+        );
+
+      }
+
+      return;
+
+    }
+
+
+    /* ======================================================
+       CTRL + SHIFT + Z
+       CTRL + Y
+    ====================================================== */
+
+    if(
+      (
+        event.ctrlKey &&
+        event.shiftKey &&
+        event.key.toLowerCase() === "z"
+      )
+      ||
+      (
+        event.ctrlKey &&
+        event.key.toLowerCase() === "y"
+      )
+    ){
+
+      event.preventDefault();
+
+      if(
+        historyIndex <
+        history.length - 1
+      ){
+
+        applyHistory(
+          historyIndex + 1
+        );
+
+      }
+
+      return;
+
+    }
+
+
+    /* ======================================================
+       CTRL + S
+    ====================================================== */
+
+    if(
+      event.ctrlKey &&
+      event.key.toLowerCase() === "s"
+    ){
+
+      event.preventDefault();
+
+      saveState();
+
+    }
+
+  }
+);
+
+
+/* ==========================================================
+   WSTAWIANIE CZYSTEGO TEKSTU
+========================================================== */
+
+function insertPlainText(
+  text
+){
+
+  const selection =
+    window.getSelection();
+
+
+  if(
+    !selection ||
+    selection.rangeCount === 0
+  ){
+
+    return;
+
+  }
+
+
+  const range =
+    selection.getRangeAt(0);
+
+
+  range.deleteContents();
+
+
+  const node =
+    document.createTextNode(
+      text
+    );
+
+
+  range.insertNode(
+    node
+  );
+
+
+  range.setStartAfter(
+    node
+  );
+
+  range.collapse(
+    true
+  );
+
+
+  selection.removeAllRanges();
+
+  selection.addRange(
+    range
+  );
+
+
+  editor.dispatchEvent(
+    new InputEvent(
+      "input",
+      {
+        bubbles:true,
+        inputType:"insertText",
+        data:text
+      }
+    )
+  );
+
+}
+
+
+/* ==========================================================
+   STATS
+========================================================== */
+
+function updateStats(){
+
+  const text =
+    extractEditorText();
+
+
+  const lines =
+    text
+      ? text.split("\n").length
+      : 0;
+
+
+  $("stats").textContent =
+    `${text.length} znaków · ${lines} linii`;
+
+}
+
+
+/* ==========================================================
+   EFEKT POD KURSOREM
+========================================================== */
+
+function getEffectAtCursor(){
+
+  const selection =
+    window.getSelection();
+
+
+  if(
+    !selection ||
+    selection.rangeCount === 0
+  ){
+
+    return null;
+
+  }
+
+
+  const line =
+    getLineElement(
+      selection.anchorNode
+    );
+
+
+  if(!line){
+
+    return null;
+
+  }
+
+
+  for(
+    const cls
+    of line.classList
+  ){
+
+    if(
+      cls.startsWith(
+        "effect-"
+      )
+    ){
+
+      const type =
+        cls.slice(
+          "effect-".length
+        );
+
+
+      const marker =
+        Object.entries(
+          MARKER_META
+        ).find(
+          ([key,value]) =>
+            value.type === type
+        )?.[0];
+
+
+      return marker || null;
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* ==========================================================
+   STATUS EFEKTU
+========================================================== */
+
+function updateEffectStatus(){
+
+  const marker =
+    getEffectAtCursor();
+
+
+  const status =
+    $("effectStatus");
+
+
+  status.className =
+    "effect-status";
+
+
+  if(!marker){
+
+    $("effectStatusText")
+      .textContent =
+      "Zwykły tekst";
+
+    return;
+
+  }
+
+
+  const meta =
+    MARKER_META[
+      marker
+    ];
+
+
+  status.classList.add(
+    meta.type
+  );
+
+
+  $("effectStatusText")
+    .textContent =
+    `${meta.name} (${marker})`;
+
+}
+
+
+/* ==========================================================
+   KURSOR
+========================================================== */
+
+editor.addEventListener(
+  "click",
+  updateEffectStatus
+);
+
+editor.addEventListener(
+  "keyup",
+  updateEffectStatus
+);
+
+editor.addEventListener(
+  "mouseup",
+  updateEffectStatus
+);
+
+
+/* ==========================================================
+   SAVE BUTTON
+========================================================== */
+
+$("saveBtn").onclick =
+  () => saveState();
+
+
+/* ==========================================================
+   EXPORT
+========================================================== */
+
+$("exportBtn").onclick =
+  () => {
+
+    state.notes[state.active] =
+      extractEditorText();
+
+
+    const data =
+      JSON.stringify(
+        {
+          ...state,
+
+          exportedAt:
+            new Date().toISOString()
+
+        },
+        null,
+        2
+      );
+
+
+    const blob =
+      new Blob(
+        [data],
+        {
+          type:
+            "application/json;charset=utf-8"
+        }
+      );
+
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const a =
+      document.createElement(
+        "a"
+      );
+
+
+    a.href =
+      url;
+
+    a.download =
+      "hawerolandia-notebook.json";
+
+
+    document.body.appendChild(
+      a
+    );
+
+    a.click();
+
+    a.remove();
+
+
+    setTimeout(
+      () =>
+        URL.revokeObjectURL(
+          url
+        ),
+      1000
+    );
+
+
+    setStatus(
+      "JSON wyeksportowany"
+    );
+
+    setSaveInfo(
+      "Eksport zakończony"
+    );
+
+  };
+
+
+/* ==========================================================
+   IMPORT
+========================================================== */
+
+$("importBtn").onclick =
+  () =>
+    $("fileInput").click();
+
+
+$("fileInput").onchange =
+  async event => {
+
+    const file =
+      event.target.files?.[0];
+
+
+    if(!file){
+      return;
+    }
+
+
+    try{
+
+      const text =
+        await file.text();
+
+
+      state =
+        normalize(
+          JSON.parse(
+            text
+          )
+        );
+
+
+      renderNav();
+
+
+      $("title").textContent =
+        categoryName(
+          state.active
+        );
+
+
+      $("search").value =
+        "";
+
+
+      $("searchResults")
+        .classList
+        .remove("show");
+
+
+      const note =
+        state.notes[
+          state.active
+        ] || "";
+
+
+      resetHistory(
+        note
+      );
+
+
+      renderEditor(
+        note
+      );
+
+
+      updateStats();
+
+      updateEffectStatus();
+
+
+      await saveState();
+
+
+      setStatus(
+        "Zaimportowano JSON"
+      );
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+      setStatus(
+        "Nieprawidłowy plik JSON",
+        false
+      );
+
+    }finally{
+
+      event.target.value =
+        "";
+
+    }
+
+  };
+
+
+/* ==========================================================
+   MARKERY MODAL
+========================================================== */
+
+$("markersBtn").onclick =
+  () =>
+    $("modal")
+      .classList
+      .add("show");
+
+
+$("closeModal").onclick =
+  () =>
+    $("modal")
+      .classList
+      .remove("show");
+
+
+$("modal").onclick =
+  event => {
+
+    if(
+      event.target ===
+      $("modal")
+    ){
+
+      $("modal")
+        .classList
+        .remove("show");
+
+    }
+
+  };
+
+
+/* ==========================================================
+   WSTAWIANIE MARKERA
+========================================================== */
+
+function insertMarker(
+  marker
+){
+
+  let suffix =
+    " ";
+
+
+  if(
+    marker === "#$" ||
+    marker === "#)"
+  ){
+
+    suffix =
+      "";
+
+  }
+
+
+  insertPlainText(
+    marker + suffix
+  );
+
+
+  $("modal")
+    .classList
+    .remove("show");
+
+
+  setStatus(
+    `Wstawiono ${marker}`
+  );
+
+}
+
+
+/* ==========================================================
+   LISTA MARKERÓW
+========================================================== */
+
+function renderMarkerList(){
+
+  $("markerList").innerHTML =
+    "";
+
+
+  for(
+    const marker
+    of [
+      "#$",
+      "#>",
+      "#?",
+      "#!",
+      "#X",
+      "#@",
+      "#M",
+      "#)"
+    ]
+  ){
+
+    const meta =
+      MARKER_META[
+        marker
+      ];
+
+
+    const row =
+      document.createElement(
+        "div"
+      );
+
+
+    row.className =
+      "marker";
+
+
+    const badge =
+      document.createElement(
+        "div"
+      );
+
+
+    badge.className =
+      "marker-badge";
+
+
+    switch(meta.type){
+
+      case "important":
+        badge.style.color =
+          "var(--warn)";
+        badge.textContent =
+          "!";
+        break;
+
+      case "uncertain":
+        badge.style.color =
+          "#d7be76";
+        badge.textContent =
+          "?";
+        break;
+
+      case "header":
+        badge.style.color =
+          "var(--blue)";
+        badge.textContent =
+          "›";
+        break;
+
+      case "lost":
+        badge.style.color =
+          "var(--danger)";
+        badge.textContent =
+          "×";
+        break;
+
+      case "character":
+        badge.style.color =
+          "var(--teal)";
+        badge.textContent =
+          "●";
+        break;
+
+      case "music":
+        badge.style.color =
+          "var(--purple)";
+        badge.textContent =
+          "♪";
+        break;
+
+      case "divider":
+        badge.style.color =
+          "var(--muted)";
+        badge.textContent =
+          "—";
+        break;
+
+      case "end":
+        badge.style.color =
+          "var(--muted)";
+        badge.textContent =
+          "×";
+        break;
+
+    }
+
+
+    const info =
+      document.createElement(
+        "div"
+      );
+
+
+    info.className =
+      "marker-info";
+
+
+    info.innerHTML = `
+      <b>
+        ${escapeHtml(marker)}
+        ·
+        ${escapeHtml(meta.name)}
+      </b>
+
+      <span>
+        ${escapeHtml(meta.description)}
+      </span>
+    `;
+
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.className =
+      "btn";
+
+
+    button.textContent =
+      "Wstaw";
+
+
+    button.onclick =
+      () =>
+        insertMarker(
+          marker
+        );
+
+
+    row.append(
+      badge,
+      info,
+      button
+    );
+
+
+    $("markerList")
+      .appendChild(
+        row
+      );
+
+  }
+
+}
+
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+$("search").addEventListener(
+  "input",
+  () => {
+
+    const query =
+      $("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const box =
+      $("searchResults");
+
+
+    if(!query){
+
+      box.classList
+        .remove("show");
+
+
+      return;
+
+    }
+
+
+    const results =
+      [];
+
+
+    for(
+      const category
+      of allCategories()
+    ){
+
+      const text =
+        String(
+          state.notes[
+            category.id
+          ] || ""
+        );
+
+
+      const lower =
+        text.toLowerCase();
+
+
+      let position =
+        0;
+
+      let count =
+        0;
+
+      let first =
+        -1;
+
+
+      while(true){
+
+        const index =
+          lower.indexOf(
+            query,
+            position
+          );
+
+
+        if(index === -1){
+          break;
+        }
+
+
+        if(first === -1){
+          first =
+            index;
+        }
+
+
+        count++;
+
+
+        position =
+          index +
+          Math.max(
+            1,
+            query.length
+          );
+
+      }
+
+
+      if(count > 0){
+
+        const line =
+          text
+            .slice(
+              0,
+              first
+            )
+            .split("\n")
+            .length;
+
+
+        const preview =
+          text
+            .split("\n")[
+              line - 1
+            ] || "";
+
+
+        results.push({
+
+          id:
+            category.id,
+
+          name:
+            category.name,
+
+          count,
+
+          preview:
+            preview.trim()
+
+        });
+
+      }
+
+    }
+
+
+    box.innerHTML =
+      "";
+
+
+    if(
+      results.length === 0
+    ){
+
+      box.innerHTML =
+        `
+          <div class="search-empty">
+            Brak wyników.
+          </div>
+        `;
+
+    }else{
+
+      for(
+        const item
+        of results
+      ){
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+          "search-result";
+
+
+        button.innerHTML = `
+          <b>
+            ${escapeHtml(
+              item.name
+            )}
+            ·
+            ${item.count}
+            ${item.count === 1
+              ? "trafienie"
+              : "trafień"}
+          </b>
+
+          <span>
+            ${escapeHtml(
+              item.preview
+            )}
+          </span>
+        `;
+
+
+        button.onclick =
+          () => {
+
+            switchCategory(
+              item.id
+            );
+
+
+            box.classList
+              .remove("show");
+
+          };
+
+
+        box.appendChild(
+          button
+        );
+
+      }
+
+    }
+
+
+    box.classList
+      .add("show");
+
+  }
+);
+
+
+/* ==========================================================
+   ZAMYKANIE SEARCH
+========================================================== */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const searchArea =
+      $("search")
+        .closest(".search");
+
+
+    if(
+      !searchArea.contains(
+        event.target
+      )
+    ){
+
+      $("searchResults")
+        .classList
+        .remove("show");
+
+    }
+
+  }
+);
+
+
+/* ==========================================================
+   AWARYJNY ZAPIS
+========================================================== */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    try{
+
+      state.notes[state.active] =
+        extractEditorText();
+
+
+      localStorage.setItem(
+        "hawerolandia_notebook_emergency",
+        JSON.stringify(
+          state
+        )
+      );
+
+    }catch(error){}
+
+  }
+);
+
+
+/* ==========================================================
+   START
+========================================================== */
+
+(async function(){
+
+  renderMarkerList();
+
+
+  state =
+    await loadState();
+
+
+  if(
+    !Object.prototype
+      .hasOwnProperty.call(
+        state.notes,
+        state.active
+      )
+  ){
+
+    state.active =
+      "story";
+
+  }
+
+
+  renderNav();
+
+
+  const text =
+    state.notes[
+      state.active
+    ] || "";
+
+
+  resetHistory(
+    text
+  );
+
+
+  renderEditor(
+    text
+  );
+
+
+  $("title").textContent =
+    categoryName(
+      state.active
+    );
+
+
+  updateStats();
+
+  updateEffectStatus();
+
+  setStatus(
+    "Gotowe"
+  );
+
+})();
+</script>
+
+</body>
+</html>
