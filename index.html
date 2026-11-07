@@ -730,6 +730,29 @@ button{
   color:#d1c9ff;
 }
 
+.ultrabox-link{
+  display:inline-block;
+  max-width:calc(100% - 34px);
+  overflow:hidden;
+  vertical-align:middle;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#cfc5ff;
+  text-decoration:none;
+  font-size:0;
+  border-bottom:1px dotted rgba(145,125,255,.55);
+}
+
+.ultrabox-link::after{
+  content:attr(data-title);
+  font-size:14px;
+}
+
+.ultrabox-link:hover{
+  color:#eeeaff;
+  border-bottom-color:#b5a8ff;
+}
+
 
 /* =========================================================
    MARKER WIZUALNY
@@ -1263,6 +1286,13 @@ button{
           Eksport JSON
         </button>
 
+        <button
+          class="btn"
+          id="exportTxtBtn"
+        >
+          Eksport TXT
+        </button>
+
       </div>
 
       <input
@@ -1448,9 +1478,10 @@ button{
         <b>#?</b>,
         <b>#&gt;</b>,
         <b>#X</b>,
-        <b>#@</b>
-        i
+        <b>#@</b>,
         <b>#M</b>
+        i
+        <b>#U</b>
         rozpoczynają efekt.
 
         <br>
@@ -1569,6 +1600,14 @@ const MARKER_META = {
     icon:"♪"
   },
 
+  "#U":{
+    name:"UltraBox",
+    description:
+      "Link do utworu UltraBox wyświetlany jako klikalny tytuł.",
+    type:"music",
+    icon:"♫"
+  },
+
   "#)":{
     name:"Koniec efektu",
     description:
@@ -1584,7 +1623,8 @@ const EFFECT_MARKERS = [
   "#!",
   "#X",
   "#@",
-  "#M"
+  "#M",
+  "#U"
 ];
 
 
@@ -2872,7 +2912,7 @@ function markerAtLine(
 
   const match =
     line.match(
-      /^(#[$>?!X@M)])(?:\s|$)/
+      /^(#[$>?!X@MU)])(?:\s|$)/
     );
 
 
@@ -2893,6 +2933,33 @@ function markerAtLine(
 
   };
 
+}
+
+
+/* ==========================================================
+   TYTUŁ UTWORU ULTRABOX
+========================================================== */
+
+function getUltraBoxTitle(url){
+  try{
+    const parsed = new URL(url);
+    const fragment = parsed.hash.replace(/^#/, "");
+    const match = fragment.match(/^u[0-9a-z]+N([0-9a-z]{2})/i);
+
+    if(match){
+      const length = parseInt(match[1], 36);
+      const start = match.index + match[0].length;
+
+      if(Number.isFinite(length) && length > 0){
+        const title = fragment.slice(start, start + length);
+        if(title.length === length){
+          return decodeURIComponent(title.replace(/\+/g, "%20")) || "Untitled";
+        }
+      }
+    }
+  }catch(error){}
+
+  return "Untitled";
 }
 
 
@@ -3212,15 +3279,38 @@ function renderSingleLine(
         detected.bodyStart
       );
 
+    if(detected.marker === "#U"){
+      const urlMatch = body.match(/https:\/\/ultraabox\.github\.io\/#\S+/i);
 
-    if(body){
+      if(urlMatch){
+        const url = urlMatch[0];
+        const title = getUltraBoxTitle(url);
+        const before = body.slice(0, urlMatch.index);
+        const after = body.slice(urlMatch.index + url.length);
 
-      line.appendChild(
-        textNode(body)
-      );
+        if(before){
+          line.appendChild(textNode(before));
+        }
 
+        const link = document.createElement("a");
+        link.className = "ultrabox-link";
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = url;
+        link.setAttribute("data-title", "♫ " + title);
+        link.setAttribute("aria-label", "Otwórz utwór UltraBox: " + title);
+        line.appendChild(link);
+
+        if(after){
+          line.appendChild(textNode(after));
+        }
+      }else if(body){
+        line.appendChild(textNode(body));
+      }
+    }else if(body){
+      line.appendChild(textNode(body));
     }
-
 
     return {
       line,
@@ -3926,6 +4016,76 @@ $("exportBtn").onclick =
 
 
 /* ==========================================================
+   EKSPORT DEKORACYJNY TXT
+========================================================== */
+
+function createDecorativeExport(){
+  const sections = [];
+
+  for(const category of allCategories()){
+    const raw = String(state.notes[category.id] || "");
+    if(!raw.trim()) continue;
+
+    const lines = raw.split("\n").map(line => {
+      const detected = markerAtLine(line);
+
+      if(!detected) return line;
+
+      if(detected.marker === "#$"){
+        return "────────────────────────────────────────";
+      }
+
+      if(detected.marker === "#)"){
+        return "";
+      }
+
+      if(detected.marker === "#U"){
+        const body = line.slice(detected.bodyStart);
+        const match = body.match(/https:\/\/ultraabox\.github\.io\/#\S+/i);
+        if(match){
+          return "♫ " + getUltraBoxTitle(match[0]);
+        }
+      }
+
+      return line.slice(detected.bodyStart);
+    });
+
+    sections.push(
+      category.name.toLocaleUpperCase("pl-PL") + ":\n" +
+      lines.join("\n").trim()
+    );
+  }
+
+  return sections.join("\n\n\n") + "\n";
+}
+
+
+$("exportTxtBtn").onclick = () => {
+  state.notes[state.active] = extractEditorText();
+
+  const blob = new Blob(
+    ["\uFEFF" + createDecorativeExport()],
+    {type:"text/plain;charset=utf-8"}
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "hawerolandia-notebook.txt";
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  setStatus("Eksport TXT zakończony");
+  setSaveInfo("Eksport zakończony");
+};
+
+
+/* ==========================================================
    IMPORT
 ========================================================== */
 
@@ -4122,6 +4282,7 @@ function renderMarkerList(){
       "#X",
       "#@",
       "#M",
+      "#U",
       "#)"
     ]
   ){
