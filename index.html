@@ -2944,7 +2944,7 @@ function getUltraBoxTitle(url){
   try{
     const parsed = new URL(url);
     const fragment = parsed.hash.replace(/^#/, "");
-    const match = fragment.match(/^u[0-9a-z]+N([0-9a-z]{2})/i);
+    const match = fragment.match(/^u[0-9a-z]N([0-9a-z]{2})/i);
 
     if(match){
       const length = parseInt(match[1], 36);
