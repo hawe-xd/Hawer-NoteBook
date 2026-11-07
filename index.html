@@ -3525,6 +3525,37 @@ function renderEditor(
 
 
 /* ==========================================================
+   LINKI ULTRABOX
+========================================================== */
+
+/*
+  Edytor jest contenteditable, więc przeglądarka może
+  potraktować zwykłe kliknięcie linku jak ustawianie kursora.
+  Obsługujemy kliknięcie ręcznie, aby link działał również
+  bez Ctrl + kliknięcia.
+*/
+editor.addEventListener(
+  "click",
+  event => {
+    const link = event.target.closest("a.ultrabox-link");
+
+    if(!link || !editor.contains(link)){
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      link.href,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+);
+
+
+/* ==========================================================
    INPUT
 ========================================================== */
 
